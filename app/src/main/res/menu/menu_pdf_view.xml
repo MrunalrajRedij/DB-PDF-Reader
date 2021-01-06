@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.devbase.dbpdfreader.ViewPDFFiles">
+
+    <item
+        android:id="@+id/shareFile"
+        android:orderInCategory="5"
+        android:icon="@drawable/share"
+        android:title="Share"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/delete"
+        android:orderInCategory="6"
+        android:icon="@drawable/delete"
+        app:showAsAction="always"
+        android:title="delete" />
+
+    <item
+        android:id="@+id/verticalView"
+        android:title="Vertical view"
+        android:orderInCategory="7"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/horizontalView"
+        android:title="Horizontal view"
+        android:orderInCategory="8"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/snapView"
+        android:title="Snap to page"
+        android:orderInCategory="9"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/freeView"
+        android:title="Free View"
+        android:orderInCategory="10"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/print"
+        android:title="Print"
+        android:orderInCategory="11"
+        app:showAsAction="never"/>
+</menu>
