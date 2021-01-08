@@ -27,14 +27,16 @@
     <com.github.barteksc.pdfviewer.PDFView
         android:id="@+id/pdfView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/adView" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/appBarLayout2"
+        android:layout_above="@id/adView"/>
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/appBarLayout2"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="-4dp"
         app:adSize="BANNER"
         app:adUnitId="ca-app-pub-3940256099942544/6300978111" />
 

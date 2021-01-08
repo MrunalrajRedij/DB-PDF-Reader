@@ -47,6 +47,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.logging.Logger;
@@ -62,8 +63,6 @@ public class ViewPDFFiles extends AppCompatActivity {
     PDFView pdfView;
     int position = -1;
 
-    private AdView mAdView;
-
     Uri uri;
 
     String filePath0,filPath1,filePath2;
@@ -72,6 +71,7 @@ public class ViewPDFFiles extends AppCompatActivity {
 
     boolean hView,sView =true;
     boolean vView,fView = false;
+    boolean n_dView = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +86,7 @@ public class ViewPDFFiles extends AppCompatActivity {
             public void onInitializationComplete(InitializationStatus initializationStatus) {
             }
         });
-        mAdView = findViewById(R.id.adView);
+        AdView mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
         //
@@ -124,7 +124,6 @@ public class ViewPDFFiles extends AppCompatActivity {
             displaPDFfromList();
         }
         else if(fromOutsidebool){
-
 
             //file name
             Uri tempUri = uri;
@@ -199,8 +198,16 @@ public class ViewPDFFiles extends AppCompatActivity {
             }
 
         }
-        else if(id == R.id.delete){
-            
+        else if(id == R.id.delete) {
+            if(MainActivity.fromFilebool){
+
+            }
+            else if(pdfListView.fromlistBool){
+
+            }
+            else if(fromOutsidebool){
+
+            }
         }
         else if (id == R.id.verticalView){
             vView = true;
@@ -212,6 +219,91 @@ public class ViewPDFFiles extends AppCompatActivity {
             hView=true;
             vView=false;
             PDF1();
+        }
+        else if(id == R.id.night_dayView){
+            if(!n_dView){
+                n_dView = true;
+                item.setTitle("Normal mode");
+                if (MainActivity.fromFilebool) {
+                    pdfView.fromUri(MainActivity.uri1)
+                            .enableSwipe(true)
+                            .enableAnnotationRendering(true)
+                            .scrollHandle(new DefaultScrollHandle(this))
+                            .swipeHorizontal(true)
+                            .pageSnap(true)
+                            .autoSpacing(true)
+                            .pageFling(true)
+                            .enableAntialiasing(true)
+                            .nightMode(true)
+                            .load();
+
+                } else if (pdfListView.fromlistBool) {
+                    pdfView.fromFile(pdfListView.fileList.get(position))
+                            .enableSwipe(true)
+                            .enableAnnotationRendering(true)
+                            .scrollHandle(new DefaultScrollHandle(this))
+                            .swipeHorizontal(true)
+                            .pageSnap(true)
+                            .autoSpacing(true)
+                            .pageFling(true)
+                            .enableAntialiasing(true)
+                            .nightMode(true)
+                            .load();
+
+                } else if (fromOutsidebool) {
+                    pdfView.fromUri(uri)
+                            .enableSwipe(true)
+                            .enableAnnotationRendering(true)
+                            .scrollHandle(new DefaultScrollHandle(this))
+                            .swipeHorizontal(true)
+                            .pageSnap(true)
+                            .autoSpacing(true)
+                            .pageFling(true)
+                            .enableAntialiasing(true)
+                            .nightMode(true)
+                            .load();
+                }
+            }
+            else {
+                n_dView = false;
+                item.setTitle("Night mode");
+                if (MainActivity.fromFilebool) {
+                    pdfView.fromUri(MainActivity.uri1)
+                            .enableSwipe(true)
+                            .enableAnnotationRendering(true)
+                            .scrollHandle(new DefaultScrollHandle(this))
+                            .swipeHorizontal(true)
+                            .pageSnap(true)
+                            .autoSpacing(true)
+                            .pageFling(true)
+                            .enableAntialiasing(true)
+                            .load();
+
+                } else if (pdfListView.fromlistBool) {
+                    pdfView.fromFile(pdfListView.fileList.get(position))
+                            .enableSwipe(true)
+                            .enableAnnotationRendering(true)
+                            .scrollHandle(new DefaultScrollHandle(this))
+                            .swipeHorizontal(true)
+                            .pageSnap(true)
+                            .autoSpacing(true)
+                            .pageFling(true)
+                            .enableAntialiasing(true)
+                            .load();
+
+                } else if (fromOutsidebool) {
+                    pdfView.fromUri(uri)
+                            .enableSwipe(true)
+                            .enableAnnotationRendering(true)
+                            .scrollHandle(new DefaultScrollHandle(this))
+                            .swipeHorizontal(true)
+                            .pageSnap(true)
+                            .autoSpacing(true)
+                            .pageFling(true)
+                            .enableAntialiasing(true)
+                            .load();
+                }
+            }
         }
         else if (id == R.id.snapView){
             sView=true;
@@ -241,6 +333,7 @@ public class ViewPDFFiles extends AppCompatActivity {
                 .pageSnap(true)
                 .autoSpacing(true)
                 .pageFling(true)
+                .enableAntialiasing(true)
                 .load();
     }
 
@@ -253,6 +346,7 @@ public class ViewPDFFiles extends AppCompatActivity {
                 .pageSnap(true)
                 .autoSpacing(true)
                 .pageFling(true)
+                .enableAntialiasing(true)
                 .load();
     }
 
@@ -266,21 +360,139 @@ public class ViewPDFFiles extends AppCompatActivity {
                 .pageSnap(true)
                 .autoSpacing(true)
                 .pageFling(true)
+                .enableAntialiasing(true)
                 .load();
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void PDF1() {
-        if(hView == true && fView == false && sView == true && vView == false ) {
+        if(hView && !fView && sView && !vView ) {
+                if (MainActivity.fromFilebool) {
+                    pdfView.fromUri(MainActivity.uri1)
+                            .enableSwipe(true)
+                            .enableAnnotationRendering(true)
+                            .scrollHandle(new DefaultScrollHandle(this))
+                            .swipeHorizontal(true)
+                            .pageSnap(true)
+                            .autoSpacing(true)
+                            .pageFling(true)
+                            .enableAntialiasing(true)
+                            .load();
+
+                } else if (pdfListView.fromlistBool) {
+                    pdfView.fromFile(pdfListView.fileList.get(position))
+                            .enableSwipe(true)
+                            .enableAnnotationRendering(true)
+                            .scrollHandle(new DefaultScrollHandle(this))
+                            .swipeHorizontal(true)
+                            .pageSnap(true)
+                            .autoSpacing(true)
+                            .pageFling(true)
+                            .enableAntialiasing(true)
+                            .load();
+
+                } else if (fromOutsidebool) {
+                    pdfView.fromUri(uri)
+                            .enableSwipe(true)
+                            .enableAnnotationRendering(true)
+                            .scrollHandle(new DefaultScrollHandle(this))
+                            .swipeHorizontal(true)
+                            .pageSnap(true)
+                            .autoSpacing(true)
+                            .pageFling(true)
+                            .enableAntialiasing(true)
+                            .load();
+                }
+        }
+        else if(hView && fView && !sView && !vView) {
+                if (MainActivity.fromFilebool) {
+                    pdfView.fromUri(MainActivity.uri1)
+                            .enableSwipe(true)
+                            .enableAnnotationRendering(true)
+                            .scrollHandle(new DefaultScrollHandle(this))
+                            .swipeHorizontal(true)
+                            .pageSnap(false)
+                            .autoSpacing(false)
+                            .pageFling(false)
+                            .enableAntialiasing(true)
+                            .load();
+
+                } else if (pdfListView.fromlistBool) {
+                    pdfView.fromFile(pdfListView.fileList.get(position))
+                            .enableSwipe(true)
+                            .enableAnnotationRendering(true)
+                            .scrollHandle(new DefaultScrollHandle(this))
+                            .swipeHorizontal(true)
+                            .pageSnap(false)
+                            .autoSpacing(false)
+                            .pageFling(false)
+                            .enableAntialiasing(true)
+                            .load();
+
+                } else if (fromOutsidebool) {
+                    pdfView.fromUri(uri)
+                            .enableSwipe(true)
+                            .enableAnnotationRendering(true)
+                            .scrollHandle(new DefaultScrollHandle(this))
+                            .swipeHorizontal(true)
+                            .pageSnap(false)
+                            .autoSpacing(false)
+                            .pageFling(false)
+                            .enableAntialiasing(true)
+                            .load();
+                }
+        }
+        else if(!hView && fView && !sView && vView) {
+                if (MainActivity.fromFilebool) {
+                    pdfView.fromUri(MainActivity.uri1)
+                            .enableSwipe(true)
+                            .enableAnnotationRendering(true)
+                            .scrollHandle(new DefaultScrollHandle(this))
+                            .swipeHorizontal(false)
+                            .pageSnap(false)
+                            .autoSpacing(false)
+                            .pageFling(false)
+                            .enableAntialiasing(true)
+                            .load();
+
+                } else if (pdfListView.fromlistBool) {
+                    pdfView.fromFile(pdfListView.fileList.get(position))
+                            .enableSwipe(true)
+                            .enableAnnotationRendering(true)
+                            .scrollHandle(new DefaultScrollHandle(this))
+                            .swipeHorizontal(false)
+                            .pageSnap(false)
+                            .autoSpacing(false)
+                            .pageFling(false)
+                            .enableAntialiasing(true)
+                            .load();
+
+                } else if (fromOutsidebool) {
+                    pdfView.fromUri(uri)
+                            .enableSwipe(true)
+                            .enableAnnotationRendering(true)
+                            .scrollHandle(new DefaultScrollHandle(this))
+                            .swipeHorizontal(false)
+                            .pageSnap(false)
+                            .autoSpacing(false)
+                            .pageFling(false)
+                            .enableAntialiasing(true)
+                            .load();
+                }
+        }
+        else if(!hView && !fView && sView && vView) {
             if (MainActivity.fromFilebool) {
                 pdfView.fromUri(MainActivity.uri1)
                         .enableSwipe(true)
                         .enableAnnotationRendering(true)
                         .scrollHandle(new DefaultScrollHandle(this))
-                        .swipeHorizontal(true)
+                        .swipeHorizontal(false)
                         .pageSnap(true)
                         .autoSpacing(true)
                         .pageFling(true)
+                        .enableAntialiasing(true)
+
                         .load();
 
             } else if (pdfListView.fromlistBool) {
@@ -288,10 +500,11 @@ public class ViewPDFFiles extends AppCompatActivity {
                         .enableSwipe(true)
                         .enableAnnotationRendering(true)
                         .scrollHandle(new DefaultScrollHandle(this))
-                        .swipeHorizontal(true)
+                        .swipeHorizontal(false)
                         .pageSnap(true)
                         .autoSpacing(true)
                         .pageFling(true)
+                        .enableAntialiasing(true)
                         .load();
 
             } else if (fromOutsidebool) {
@@ -299,84 +512,15 @@ public class ViewPDFFiles extends AppCompatActivity {
                         .enableSwipe(true)
                         .enableAnnotationRendering(true)
                         .scrollHandle(new DefaultScrollHandle(this))
-                        .swipeHorizontal(true)
+                        .swipeHorizontal(false)
                         .pageSnap(true)
                         .autoSpacing(true)
                         .pageFling(true)
+                        .enableAntialiasing(true)
                         .load();
             }
         }
-        else if(hView == true && fView == true && sView == false && vView == false ) {
-            if (MainActivity.fromFilebool) {
-                pdfView.fromUri(MainActivity.uri1)
-                        .enableSwipe(true)
-                        .enableAnnotationRendering(true)
-                        .scrollHandle(new DefaultScrollHandle(this))
-                        .swipeHorizontal(true)
-                        .pageSnap(false)
-                        .autoSpacing(false)
-                        .pageFling(false)
-                        .load();
-
-            } else if (pdfListView.fromlistBool) {
-                pdfView.fromFile(pdfListView.fileList.get(position))
-                        .enableSwipe(true)
-                        .enableAnnotationRendering(true)
-                        .scrollHandle(new DefaultScrollHandle(this))
-                        .swipeHorizontal(true)
-                        .pageSnap(false)
-                        .autoSpacing(false)
-                        .pageFling(false)
-                        .load();
-
-            } else if (fromOutsidebool) {
-                pdfView.fromUri(uri)
-                        .enableSwipe(true)
-                        .enableAnnotationRendering(true)
-                        .scrollHandle(new DefaultScrollHandle(this))
-                        .swipeHorizontal(true)
-                        .pageSnap(false)
-                        .autoSpacing(false)
-                        .pageFling(false)
-                        .load();
-            }
-        }
-        else if(hView == false && fView == true && sView == false && vView == true ) {
-            if (MainActivity.fromFilebool) {
-                pdfView.fromUri(MainActivity.uri1)
-                        .enableSwipe(true)
-                        .enableAnnotationRendering(true)
-                        .scrollHandle(new DefaultScrollHandle(this))
-                        .swipeHorizontal(false)
-                        .pageSnap(false)
-                        .autoSpacing(false)
-                        .pageFling(false)
-                        .load();
-
-            } else if (pdfListView.fromlistBool) {
-                pdfView.fromFile(pdfListView.fileList.get(position))
-                        .enableSwipe(true)
-                        .enableAnnotationRendering(true)
-                        .scrollHandle(new DefaultScrollHandle(this))
-                        .swipeHorizontal(false)
-                        .pageSnap(false)
-                        .autoSpacing(false)
-                        .pageFling(false)
-                        .load();
-
-            } else if (fromOutsidebool) {
-                pdfView.fromUri(uri)
-                        .enableSwipe(true)
-                        .enableAnnotationRendering(true)
-                        .scrollHandle(new DefaultScrollHandle(this))
-                        .swipeHorizontal(false)
-                        .pageSnap(false)
-                        .autoSpacing(false)
-                        .pageFling(false)
-                        .load();
-            }
-        }
-        else if(hView == false && fView == false && sView == true && vView == true ) {
+        else if(!hView && !fView && sView && vView) {
             if (MainActivity.fromFilebool) {
                 pdfView.fromUri(MainActivity.uri1)
                         .enableSwipe(true)
@@ -386,6 +530,8 @@ public class ViewPDFFiles extends AppCompatActivity {
                         .pageSnap(true)
                         .autoSpacing(true)
                         .pageFling(true)
+                        .enableAntialiasing(true)
+
                         .load();
 
             } else if (pdfListView.fromlistBool) {
@@ -397,6 +543,7 @@ public class ViewPDFFiles extends AppCompatActivity {
                         .pageSnap(true)
                         .autoSpacing(true)
                         .pageFling(true)
+                        .enableAntialiasing(true)
                         .load();
 
             } else if (fromOutsidebool) {
@@ -408,6 +555,7 @@ public class ViewPDFFiles extends AppCompatActivity {
                         .pageSnap(true)
                         .autoSpacing(true)
                         .pageFling(true)
+                        .enableAntialiasing(true)
                         .load();
             }
         }

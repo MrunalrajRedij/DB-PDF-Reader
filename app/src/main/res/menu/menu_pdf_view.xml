@@ -30,20 +30,26 @@
         app:showAsAction="never"/>
 
     <item
+        android:id="@+id/night_dayView"
+        android:title="Night mode"
+        android:orderInCategory="9"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/snapView"
         android:title="Snap to page"
-        android:orderInCategory="9"
+        android:orderInCategory="10"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/freeView"
         android:title="Free View"
-        android:orderInCategory="10"
+        android:orderInCategory="11"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/print"
         android:title="Print"
-        android:orderInCategory="11"
+        android:orderInCategory="12"
         app:showAsAction="never"/>
 </menu>
