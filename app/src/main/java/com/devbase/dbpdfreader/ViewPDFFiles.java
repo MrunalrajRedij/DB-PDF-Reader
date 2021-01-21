@@ -1,8 +1,11 @@
 package com.devbase.dbpdfreader;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.pdf.PdfDocument;
@@ -23,11 +26,13 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.customview.widget.Openable;
+import androidx.documentfile.provider.DocumentFile;
 
 import android.os.CancellationSignal;
 import android.os.Environment;
@@ -38,18 +43,22 @@ import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintManager;
 import android.provider.ContactsContract;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 import static android.Manifest.permission.MANAGE_DOCUMENTS;
@@ -60,12 +69,13 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 public class ViewPDFFiles extends AppCompatActivity {
 
 
+    private static final String TAG="" ;
     PDFView pdfView;
     int position = -1;
 
     Uri uri;
 
-    String filePath0,filPath1,filePath2;
+    String filePath0,filPath1,filePath2,filePath3;
 
     boolean fromOutsidebool = false;
 
@@ -92,18 +102,18 @@ public class ViewPDFFiles extends AppCompatActivity {
         //
 
 
-        pdfView = (PDFView) findViewById(R.id.pdfView);
+        pdfView = findViewById(R.id.pdfView);
         position = getIntent().getIntExtra("position",-1);
 
         uri = getIntent().getData();
         if(uri!=null){
             MainActivity.fromFilebool = false;
-            pdfListView.fromlistBool = false;
             fromOutsidebool = true;
         }
 
 
         ActionBar actionBar = getSupportActionBar();
+
 
         if(MainActivity.fromFilebool){
             //file name
@@ -115,13 +125,6 @@ public class ViewPDFFiles extends AppCompatActivity {
             actionBar.setTitle(filePath0);
 
             displaPDFfromFile();
-        }
-        else if(pdfListView.fromlistBool){
-            //file name
-            actionBar.setTitle(pdfListView.fileList.get(position).getName());
-            filPath1 = pdfListView.fileList.get(position).getPath();
-
-            displaPDFfromList();
         }
         else if(fromOutsidebool){
 
@@ -139,6 +142,12 @@ public class ViewPDFFiles extends AppCompatActivity {
             actionBar.setTitle(filePath2);
 
             displayPDFfromOutside();
+        }
+        else if(createPDFActivity.fromCreatebool){
+            actionBar.setTitle(createPDFActivity.fromCreate.getName());
+            filePath3 = createPDFActivity.fromCreate.getPath();
+
+            diaplayPDFfromCreate();
         }
     }
 
@@ -171,20 +180,7 @@ public class ViewPDFFiles extends AppCompatActivity {
                 catch (Exception e){
                     Toast.makeText(this,"Go back and try again !",Toast.LENGTH_SHORT).show();
                 }
-            }
-            else if(pdfListView.fromlistBool){
-                try {
-                    Intent intentShare = new Intent(Intent.ACTION_SEND);
-                    intentShare.setType("application/pdf");
-                    intentShare.putExtra(Intent.EXTRA_STREAM,Uri.parse(filPath1));
-
-                    startActivity(Intent.createChooser(intentShare, "Share file by :"));
-                }
-                catch (Exception e){
-                    Toast.makeText(this,"Go back and try again !",Toast.LENGTH_SHORT).show();
-                }
-            }
-            else if(fromOutsidebool){
+            }else if(fromOutsidebool){
                 try {
                     Intent intentShare = new Intent(Intent.ACTION_SEND);
                     intentShare.setType("application/pdf");
@@ -196,24 +192,24 @@ public class ViewPDFFiles extends AppCompatActivity {
                     Toast.makeText(this,"Go back and try again !",Toast.LENGTH_LONG).show();
                 }
             }
+            else if(createPDFActivity.fromCreatebool){
+                try {
 
-        }
-        else if(id == R.id.delete) {
-            if(MainActivity.fromFilebool){
+                    Intent intentShare = new Intent(Intent.ACTION_SEND);
+                    intentShare.setType("application/pdf");
+                    intentShare.putExtra(Intent.EXTRA_STREAM,Uri.parse(filePath3));
+                    startActivity(Intent.createChooser(intentShare,"Share file by :"));
 
+                }catch (Exception e){
+                    Toast.makeText(this,"Go back and try again !",Toast.LENGTH_LONG).show();
+                }
             }
-            else if(pdfListView.fromlistBool){
 
-            }
-            else if(fromOutsidebool){
-
-            }
         }
         else if (id == R.id.verticalView){
             vView = true;
-            hView=false;
+            hView = false;
             PDF1();
-
         }
         else if (id == R.id.horizontalView){
             hView=true;
@@ -221,7 +217,22 @@ public class ViewPDFFiles extends AppCompatActivity {
             PDF1();
         }
         else if(id == R.id.night_dayView){
+
             if(!n_dView){
+
+
+                AlertDialog.Builder ad = new AlertDialog.Builder(ViewPDFFiles.this);
+                ad.setTitle("Night mode is unstable and\nonly present in default settings");
+                ad.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                ad.create();
+                ad.show();
+
+
                 n_dView = true;
                 item.setTitle("Normal mode");
                 if (MainActivity.fromFilebool) {
@@ -237,8 +248,8 @@ public class ViewPDFFiles extends AppCompatActivity {
                             .nightMode(true)
                             .load();
 
-                } else if (pdfListView.fromlistBool) {
-                    pdfView.fromFile(pdfListView.fileList.get(position))
+                }else if (fromOutsidebool) {
+                    pdfView.fromUri(uri)
                             .enableSwipe(true)
                             .enableAnnotationRendering(true)
                             .scrollHandle(new DefaultScrollHandle(this))
@@ -249,9 +260,8 @@ public class ViewPDFFiles extends AppCompatActivity {
                             .enableAntialiasing(true)
                             .nightMode(true)
                             .load();
-
-                } else if (fromOutsidebool) {
-                    pdfView.fromUri(uri)
+                } else if (createPDFActivity.fromCreatebool) {
+                    pdfView.fromFile(createPDFActivity.fromCreate)
                             .enableSwipe(true)
                             .enableAnnotationRendering(true)
                             .scrollHandle(new DefaultScrollHandle(this))
@@ -279,8 +289,8 @@ public class ViewPDFFiles extends AppCompatActivity {
                             .enableAntialiasing(true)
                             .load();
 
-                } else if (pdfListView.fromlistBool) {
-                    pdfView.fromFile(pdfListView.fileList.get(position))
+                }else if (fromOutsidebool) {
+                    pdfView.fromUri(uri)
                             .enableSwipe(true)
                             .enableAnnotationRendering(true)
                             .scrollHandle(new DefaultScrollHandle(this))
@@ -290,9 +300,9 @@ public class ViewPDFFiles extends AppCompatActivity {
                             .pageFling(true)
                             .enableAntialiasing(true)
                             .load();
-
-                } else if (fromOutsidebool) {
-                    pdfView.fromUri(uri)
+                }
+                else if (createPDFActivity.fromCreatebool) {
+                    pdfView.fromFile(createPDFActivity.fromCreate)
                             .enableSwipe(true)
                             .enableAnnotationRendering(true)
                             .scrollHandle(new DefaultScrollHandle(this))
@@ -315,26 +325,9 @@ public class ViewPDFFiles extends AppCompatActivity {
             sView=false;
             PDF1();
         }
-        else if(id == R.id.print){
-            printPDF();
-        }
 
 
         return super.onOptionsItemSelected(item);
-    }
-
-
-    private void displaPDFfromList() {
-        pdfView.fromFile(pdfListView.fileList.get(position))
-                .enableSwipe(true)
-                .enableAnnotationRendering(true)
-                .scrollHandle(new DefaultScrollHandle(this))
-                .swipeHorizontal(true)
-                .pageSnap(true)
-                .autoSpacing(true)
-                .pageFling(true)
-                .enableAntialiasing(true)
-                .load();
     }
 
     private void displaPDFfromFile() {
@@ -364,6 +357,20 @@ public class ViewPDFFiles extends AppCompatActivity {
                 .load();
     }
 
+    private void diaplayPDFfromCreate(){
+        pdfView.fromFile(createPDFActivity.fromCreate)
+                .enableSwipe(true)
+                .enableAnnotationRendering(true)
+                .scrollHandle(new DefaultScrollHandle(this))
+                .swipeHorizontal(true)
+                .pageSnap(true)
+                .autoSpacing(true)
+                .pageFling(true)
+                .enableAntialiasing(true)
+                .load();
+
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void PDF1() {
@@ -380,8 +387,8 @@ public class ViewPDFFiles extends AppCompatActivity {
                             .enableAntialiasing(true)
                             .load();
 
-                } else if (pdfListView.fromlistBool) {
-                    pdfView.fromFile(pdfListView.fileList.get(position))
+                }else if (fromOutsidebool) {
+                    pdfView.fromUri(uri)
                             .enableSwipe(true)
                             .enableAnnotationRendering(true)
                             .scrollHandle(new DefaultScrollHandle(this))
@@ -391,9 +398,8 @@ public class ViewPDFFiles extends AppCompatActivity {
                             .pageFling(true)
                             .enableAntialiasing(true)
                             .load();
-
-                } else if (fromOutsidebool) {
-                    pdfView.fromUri(uri)
+                }else if (createPDFActivity.fromCreatebool) {
+                    pdfView.fromFile(createPDFActivity.fromCreate)
                             .enableSwipe(true)
                             .enableAnnotationRendering(true)
                             .scrollHandle(new DefaultScrollHandle(this))
@@ -418,8 +424,8 @@ public class ViewPDFFiles extends AppCompatActivity {
                             .enableAntialiasing(true)
                             .load();
 
-                } else if (pdfListView.fromlistBool) {
-                    pdfView.fromFile(pdfListView.fileList.get(position))
+                }else if (fromOutsidebool) {
+                    pdfView.fromUri(uri)
                             .enableSwipe(true)
                             .enableAnnotationRendering(true)
                             .scrollHandle(new DefaultScrollHandle(this))
@@ -429,9 +435,8 @@ public class ViewPDFFiles extends AppCompatActivity {
                             .pageFling(false)
                             .enableAntialiasing(true)
                             .load();
-
-                } else if (fromOutsidebool) {
-                    pdfView.fromUri(uri)
+                }else if (createPDFActivity.fromCreatebool) {
+                    pdfView.fromFile(createPDFActivity.fromCreate)
                             .enableSwipe(true)
                             .enableAnnotationRendering(true)
                             .scrollHandle(new DefaultScrollHandle(this))
@@ -456,8 +461,8 @@ public class ViewPDFFiles extends AppCompatActivity {
                             .enableAntialiasing(true)
                             .load();
 
-                } else if (pdfListView.fromlistBool) {
-                    pdfView.fromFile(pdfListView.fileList.get(position))
+                }else if (fromOutsidebool) {
+                    pdfView.fromUri(uri)
                             .enableSwipe(true)
                             .enableAnnotationRendering(true)
                             .scrollHandle(new DefaultScrollHandle(this))
@@ -467,9 +472,8 @@ public class ViewPDFFiles extends AppCompatActivity {
                             .pageFling(false)
                             .enableAntialiasing(true)
                             .load();
-
-                } else if (fromOutsidebool) {
-                    pdfView.fromUri(uri)
+                }else if (createPDFActivity.fromCreatebool) {
+                    pdfView.fromFile(createPDFActivity.fromCreate)
                             .enableSwipe(true)
                             .enableAnnotationRendering(true)
                             .scrollHandle(new DefaultScrollHandle(this))
@@ -495,19 +499,7 @@ public class ViewPDFFiles extends AppCompatActivity {
 
                         .load();
 
-            } else if (pdfListView.fromlistBool) {
-                pdfView.fromFile(pdfListView.fileList.get(position))
-                        .enableSwipe(true)
-                        .enableAnnotationRendering(true)
-                        .scrollHandle(new DefaultScrollHandle(this))
-                        .swipeHorizontal(false)
-                        .pageSnap(true)
-                        .autoSpacing(true)
-                        .pageFling(true)
-                        .enableAntialiasing(true)
-                        .load();
-
-            } else if (fromOutsidebool) {
+            }else if (fromOutsidebool) {
                 pdfView.fromUri(uri)
                         .enableSwipe(true)
                         .enableAnnotationRendering(true)
@@ -518,36 +510,8 @@ public class ViewPDFFiles extends AppCompatActivity {
                         .pageFling(true)
                         .enableAntialiasing(true)
                         .load();
-            }
-        }
-        else if(!hView && !fView && sView && vView) {
-            if (MainActivity.fromFilebool) {
-                pdfView.fromUri(MainActivity.uri1)
-                        .enableSwipe(true)
-                        .enableAnnotationRendering(true)
-                        .scrollHandle(new DefaultScrollHandle(this))
-                        .swipeHorizontal(false)
-                        .pageSnap(true)
-                        .autoSpacing(true)
-                        .pageFling(true)
-                        .enableAntialiasing(true)
-
-                        .load();
-
-            } else if (pdfListView.fromlistBool) {
-                pdfView.fromFile(pdfListView.fileList.get(position))
-                        .enableSwipe(true)
-                        .enableAnnotationRendering(true)
-                        .scrollHandle(new DefaultScrollHandle(this))
-                        .swipeHorizontal(false)
-                        .pageSnap(true)
-                        .autoSpacing(true)
-                        .pageFling(true)
-                        .enableAntialiasing(true)
-                        .load();
-
-            } else if (fromOutsidebool) {
-                pdfView.fromUri(uri)
+            }else if (createPDFActivity.fromCreatebool) {
+                pdfView.fromFile(createPDFActivity.fromCreate)
                         .enableSwipe(true)
                         .enableAnnotationRendering(true)
                         .scrollHandle(new DefaultScrollHandle(this))
@@ -564,18 +528,6 @@ public class ViewPDFFiles extends AppCompatActivity {
 
 
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private void printPDF(){
-        PrintManager printManager=(PrintManager)getSystemService(Context.PRINT_SERVICE);
-        try {
-            PrintDocumentAdapter printAdapter = new PdfDocumentAdapter(this,pdfListView.fileList.get(position).toString());
-            printManager.print("Document", printAdapter, new PrintAttributes.Builder().build());
-        }
-        catch(Exception e)
-        {
-            Toast.makeText(this,"Try Again!",Toast.LENGTH_SHORT).show();
-        }
-    }
 
     @Override
     public void onBackPressed() {
@@ -584,6 +536,8 @@ public class ViewPDFFiles extends AppCompatActivity {
         MainActivity.uri1 = null;
         MainActivity.fromFilebool = false;
         fromOutsidebool = false;
+        createPDFActivity.fromCreatebool =false;
+        createPDFActivity.fromCreate = null;
 
     }
 }

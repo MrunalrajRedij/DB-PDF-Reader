@@ -14,6 +14,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -41,5 +43,8 @@ dependencies {
 
     implementation 'com.github.barteksc:android-pdf-viewer:3.2.0-beta.1'
     implementation 'com.google.android.gms:play-services-ads:19.6.0'
+    implementation 'com.itextpdf:itextpdf:5.0.6'
+
+    implementation "androidx.multidex:multidex:2.0.1"
 
 }

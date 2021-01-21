@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -27,21 +28,57 @@
         android:id="@+id/open_pdf"
         android:layout_width="326dp"
         android:layout_height="97dp"
-        android:text="         open particular PDF file"
-        android:layout_below="@+id/appBarLayout"/>
+        android:layout_below="@+id/appBarLayout"
+        android:layout_marginTop="108dp"
+        android:gravity="center"
+        android:text="open particular PDF file"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/open_pdf_list"
-        android:layout_width="326dp"
-        android:layout_height="97dp"
-        android:text="                   On this device"
-        android:layout_below="@+id/open_pdf"/>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/newBtn"
-        android:src="@drawable/new_pdf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="177dp"
+        android:layout_height="85dp"
+        android:layout_marginTop="96dp"
+        android:gravity="center"
+        android:text="Create PDF"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/open_pdf" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/AboutBtn"
+        android:layout_width="175dp"
+        android:layout_height="110dp"
+        android:layout_marginBottom="40dp"
+        android:gravity="center"
+        android:text="About us >"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ppBtn"
+        app:layout_constraintHorizontal_bias="0.615"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/ppBtn"
+        android:layout_width="190dp"
+        android:layout_height="108dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="44dp"
+        android:gravity="center"
+        android:text="Privacy policy >"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

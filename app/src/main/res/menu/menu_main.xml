@@ -7,25 +7,13 @@
 
     <item
         android:id="@+id/share"
-        android:orderInCategory="5"
+        android:orderInCategory="4"
         android:title="Share app"
         app:showAsAction="never" />
     <item
-        android:id="@+id/about"
-        android:orderInCategory="6"
-        android:title="About"
-        app:showAsAction="never"/>
-
-    <item
         android:id="@+id/contact"
         android:title="Contact us"
-        android:orderInCategory="7"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/privacyPolicy"
-        android:orderInCategory="8"
-        android:title="Privacy Policy"
+        android:orderInCategory="5"
         app:showAsAction="never"/>
 
 

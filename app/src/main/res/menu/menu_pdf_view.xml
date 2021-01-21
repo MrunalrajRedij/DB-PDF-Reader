@@ -10,12 +10,6 @@
         android:icon="@drawable/share"
         android:title="Share"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/delete"
-        android:orderInCategory="6"
-        android:icon="@drawable/delete"
-        app:showAsAction="always"
-        android:title="delete" />
 
     <item
         android:id="@+id/verticalView"
@@ -45,11 +39,5 @@
         android:id="@+id/freeView"
         android:title="Free View"
         android:orderInCategory="11"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/print"
-        android:title="Print"
-        android:orderInCategory="12"
         app:showAsAction="never"/>
 </menu>
