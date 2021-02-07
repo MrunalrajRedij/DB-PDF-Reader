@@ -1,22 +1,31 @@
 package com.devbase.dbpdfreader;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.io.File;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,31 +34,29 @@ public class MainActivity extends AppCompatActivity {
     static boolean fromFilebool = false;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        SharedPreferences sp = getSharedPreferences("JP",MODE_PRIVATE);
-        boolean bln = sp.getBoolean("ONCE",true);
 
-        if(bln){
+        SharedPreferences sp = getSharedPreferences("JP", MODE_PRIVATE);
+        boolean bln = sp.getBoolean("ONCE", true);
+
+        if (bln) {
 
             AlertDialog.Builder mainAlert = new AlertDialog.Builder(MainActivity.this);
             mainAlert.setTitle("WELCOME");
             mainAlert.setMessage("And sorry for enabling ads.\n" +
                     "As a student it fill up my coffee mug.\n" +
-                    "I will remove them with my graduation.\n"+
-                    "Pinky Primise!");
+                    "I will remove them with my graduation.\n" +
+                    "Pinky Promise!");
             mainAlert.setCancelable(false);
             mainAlert.setPositiveButton("I get it", (dialog, which) -> dialog.dismiss());
             mainAlert.show();
 
             SharedPreferences.Editor ediotr = sp.edit();
-            ediotr.putBoolean("ONCE",false);
+            ediotr.putBoolean("ONCE", false);
             ediotr.apply();
 
         }
@@ -57,38 +64,25 @@ public class MainActivity extends AppCompatActivity {
 
 
         ExtendedFloatingActionButton newBtn = findViewById(R.id.newBtn);
-        newBtn.setOnClickListener(v -> startActivity(new Intent(MainActivity.this,createPDFActivity.class)));
+        newBtn.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, createPDFActivity.class)));
+
+        Button listBtn = findViewById(R.id.listBtn);
+        listBtn.setOnClickListener(v -> startActivity(new Intent(MainActivity.this,pdfList.class)));
 
 
-        ExtendedFloatingActionButton openParticularPDFBtn =findViewById(R.id.open_pdf);
+        ExtendedFloatingActionButton openParticularPDFBtn = findViewById(R.id.open_pdf);
         openParticularPDFBtn.setOnClickListener(v -> {
-             Intent pdfFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
-             pdfFileIntent.setType("application/pdf");
-             startActivityForResult(pdfFileIntent,1);
+            Intent pdfFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            pdfFileIntent.setType("application/pdf");
+            startActivityForResult(pdfFileIntent, 1);
+
         });
 
-        ExtendedFloatingActionButton AboutBtn = findViewById(R.id.AboutBtn);
-        AboutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                startActivity(new Intent(MainActivity.this,aboutActivity.class));
-
-            }
-        });
-
-        ExtendedFloatingActionButton ppBtn = findViewById(R.id.ppBtn);
-        ppBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String url = "https://devbaseflashlight.blogspot.com/2021/01/db-pdf-reader-policy.html";
-                Uri uri = Uri.parse(url);
-                Intent launchPrivacyPolicy = new Intent(Intent.ACTION_VIEW,uri);
-                startActivity(launchPrivacyPolicy);
-            }
-        });
 
     }
+
+
 
 
 
@@ -123,12 +117,18 @@ public class MainActivity extends AppCompatActivity {
         } else if(id == R.id.contact){
             Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse("mailto:" + "devbase123@gmail.com"));
             startActivity(intent);
+        }else if(id == R.id.pPolicy){
+            String url = "https://devbaseflashlight.blogspot.com/2021/01/db-pdf-reader-policy.html";
+            Uri uri = Uri.parse(url);
+            Intent launchPrivacyPolicy = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(launchPrivacyPolicy);
+        }else if(id == R.id.AboutUS){
+            startActivity(new Intent(MainActivity.this, aboutActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
 

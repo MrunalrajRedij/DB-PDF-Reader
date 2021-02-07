@@ -1,12 +1,19 @@
 package com.devbase.dbpdfreader;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
@@ -48,10 +55,25 @@ public class createPDFActivity extends AppCompatActivity {
     InterstitialAd mInterstitialAd;
     private  InterstitialAd interstitial;
 
+    boolean perm = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if (getApplicationContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+                perm = true;
+            }else {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
+            }
+        }else{
+            perm = true;
+        }
+
         setContentView(R.layout.activity_create_p_d_f);
+
+
 
         //Action Bar
         ActionBar actionBar = getSupportActionBar();
@@ -59,7 +81,7 @@ public class createPDFActivity extends AppCompatActivity {
 
         //mainCreate alert box
         AlertDialog.Builder mainCreate = new AlertDialog.Builder(createPDFActivity.this);
-        mainCreate.setTitle("PDF creation is still in beta.\nMore options will be added soon ! ");
+        mainCreate.setMessage("PDF creation is still in beta.\nMore options will be added soon ! ");
         mainCreate.setCancelable(false);
         mainCreate.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
@@ -88,79 +110,99 @@ public class createPDFActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final AlertDialog.Builder alertDialog = new AlertDialog.Builder(createPDFActivity.this);
-                alertDialog.setTitle("Create PDF ?");
+                alertDialog.setMessage("Create PDF ?");
                 alertDialog.setCancelable(false);
 
                 alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String nameT = name.getText().toString();
                         String bodyT = body.getText().toString();
                         String titleT = title.getText().toString();
-                        String path = getExternalFilesDir(null).toString()+"/"+nameT+".pdf";
-                        File file = new File(path);
-                        if(!file.exists()){
-                            try {
-                                file.createNewFile();
-                            }catch (IOException e){
-                                e.printStackTrace();
+
+                        if(perm){
+
+                            File folder = new File(Environment.getExternalStorageDirectory()+"/"+"DB PDF Reader");
+
+                            if(!folder.exists()){
+                                folder.mkdirs();
                             }
-                        }
-                        Document document = new Document(PageSize.A4);
-                        try {
-                            PdfWriter.getInstance(document, new FileOutputStream(file.getAbsoluteFile()));
-                        } catch (DocumentException e) {
-                            e.printStackTrace();
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        document.open();
-                        try {
-                            document.add(new Paragraph(titleT,new Font(Font.FontFamily.UNDEFINED,50,Font.BOLD)));
-                            document.add(new Paragraph("\n"));
-                            document.add(new Paragraph(bodyT,new Font(Font.FontFamily.UNDEFINED,30,Font.NORMAL)));
 
-                        } catch (DocumentException e) {
-                            e.printStackTrace();
-                        }
-                        Toast.makeText(getApplicationContext(),"PDF created successfully",Toast.LENGTH_LONG).show();
-                        document.close();
 
-                        AdRequest adRequest = new AdRequest.Builder().build();
-                        interstitial = new InterstitialAd(createPDFActivity.this);
-                        interstitial.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
-                        interstitial.loadAd(adRequest);
-                        interstitial.setAdListener(new AdListener(){
-                            public void onAdLoaded(){
-                                displayInterstitial();
-                            }
-                        });
 
-                        
-                        final AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(createPDFActivity.this);
-                        alertDialog2.setTitle("Open recently created PDF ?");
-                        alertDialog2.setCancelable(false);
-                        alertDialog2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (file.exists()) {
-                                    fromCreatebool = true;
-                                    fromCreate = new File(path);
-                                    onBackPressed();
-                                    startActivity(new Intent(createPDFActivity.this,ViewPDFFiles.class));
+                            String path = folder + "/" + nameT + ".pdf";
+
+                            File file = new File(path);
+                            if (!file.exists()) {
+                                try {
+                                    file.createNewFile();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
                             }
-                        });
-                        alertDialog2.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                onBackPressed();
+                            Document document = new Document(PageSize.A4);
+                            try {
+                                PdfWriter.getInstance(document, new FileOutputStream(file.getAbsoluteFile()));
+                            } catch (DocumentException e) {
+                                e.printStackTrace();
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
                             }
-                        });
+                            document.open();
+                            try {
+                                document.add(new Paragraph(titleT, new Font(Font.FontFamily.UNDEFINED, 50, Font.BOLD)));
+                                document.add(new Paragraph("\n"));
+                                document.add(new Paragraph(bodyT, new Font(Font.FontFamily.UNDEFINED, 30, Font.NORMAL)));
 
-                        AlertDialog alertDialog3 = alertDialog2.create();
-                        alertDialog3.show();
+                            } catch (DocumentException e) {
+                                e.printStackTrace();
+                            }
+                            Toast.makeText(getApplicationContext(), "PDF created successfully", Toast.LENGTH_LONG).show();
+                            document.close();
+
+                            AdRequest adRequest = new AdRequest.Builder().build();
+                            interstitial = new InterstitialAd(createPDFActivity.this);
+                            interstitial.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+                            interstitial.loadAd(adRequest);
+                            interstitial.setAdListener(new AdListener() {
+                                public void onAdLoaded() {
+                                    displayInterstitial();
+                                }
+                            });
+
+
+                            final AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(createPDFActivity.this);
+                            alertDialog2.setMessage("Open recently created PDF ?");
+                            alertDialog2.setCancelable(false);
+                            alertDialog2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (file.exists()) {
+                                        fromCreatebool = true;
+                                        fromCreate = new File(path);
+                                        onBackPressed();
+                                        startActivity(new Intent(createPDFActivity.this, ViewPDFFiles.class));
+                                    }
+                                }
+                            });
+                            alertDialog2.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    onBackPressed();
+                                }
+                            });
+
+                            AlertDialog alertDialog3 = alertDialog2.create();
+                            alertDialog3.show();
+                        }else {
+                            Toast.makeText(createPDFActivity.this,"Give permission from settings and restart the application",Toast.LENGTH_LONG).show();
+                        }
+
+
+
                     }
+
                 });
                 alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
@@ -178,6 +220,21 @@ public class createPDFActivity extends AppCompatActivity {
         if(interstitial.isLoaded()){
             interstitial.show();
             interstitial.setImmersiveMode(true);
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(requestCode == 1){
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(createPDFActivity.this,"Permission granted",Toast.LENGTH_LONG).show();
+                perm = true;
+            }else {
+                Toast.makeText(createPDFActivity.this,"Permission has not been granted",Toast.LENGTH_LONG).show();
+            }
         }
     }
 }

@@ -3,4 +3,25 @@
     <string name="title_activity_view_p_d_f_files">ViewPDFFiles</string>
     <string name="title_activity_pdf_list_view">PDF list</string>
 
+    <string name="Aboutapp">
+        The app is basic PDF Reader.
+        Our main goal was to create simple pdf reader without advance options
+        Since we dont need them on regular basis making this app of lesser size.App supports night mode which is helpful to read documents in night.
+        It also has create pdf option with which you can create your own pdf.
+
+        More options:-
+        1)Horizontal view - Horizontal scroll
+        2)Vertical View - Vertical scroll
+        3)Snap to page - Scroll one page at a time
+        4)Free view - scroll multiple pages ata time
+
+        It is still in beta so stay tuned for more updates such as more pages pdf, optimisation for how it looks, etc.
+    </string>
+
+    <string name="AboutUs">
+        DevBase is self assigned company and is created by bunch of college guys learning to find their passion in this huge IT world.
+        Our goal is to create bunch of apps we require in our daily life and learn the basic of android development.
+        It will be great help if you keep on supporting us.
+    </string>
+
 </resources>

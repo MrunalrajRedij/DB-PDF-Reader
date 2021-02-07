@@ -10,11 +10,26 @@
         android:orderInCategory="4"
         android:title="Share app"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/AboutUS"
+        android:title="About us"
+        android:orderInCategory="5"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/pPolicy"
+        android:title="Privacy policy"
+        android:orderInCategory="6"
+        app:showAsAction="never"/>
+
     <item
         android:id="@+id/contact"
         android:title="Contact us"
-        android:orderInCategory="5"
+        android:orderInCategory="7"
         app:showAsAction="never"/>
+
+
 
 
 </menu>

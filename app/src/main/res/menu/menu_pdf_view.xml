@@ -4,12 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.devbase.dbpdfreader.ViewPDFFiles">
 
+
     <item
         android:id="@+id/shareFile"
         android:orderInCategory="5"
         android:icon="@drawable/share"
         android:title="Share"
         app:showAsAction="always" />
+
+
 
     <item
         android:id="@+id/verticalView"
@@ -39,5 +42,18 @@
         android:id="@+id/freeView"
         android:title="Free View"
         android:orderInCategory="11"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/deleteFile"
+        android:orderInCategory="12"
+        android:icon="@drawable/delete_i"
+        android:title="Delete"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/print"
+        android:title="Print"
+        android:orderInCategory="13"
         app:showAsAction="never"/>
 </menu>
