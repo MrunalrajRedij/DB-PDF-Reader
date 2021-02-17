@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".aboutActivity">
+
+
+    <TextView
+        android:id="@+id/AboutA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="About app >"
+        android:textColor="@color/black"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.026"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Abouta"
+        android:layout_width="663dp"
+        android:layout_height="170dp"
+        android:layout_below="@+id/AboutA"
+        android:layout_marginTop="4dp"
+        android:text="The app is basic PDF Reader. Our main goal was to create simple pdf reader without advance options, Since we dont need them on regular basis making this app of lesser size. App supports night mode which is helpful to read documents in night. It also has create pdf option with which you can create your own pdf.\n
+More options in PDF viewer:-\n
+1)Horizontal view - Horizontal scroll\n
+2)Vertical View - Vertical scroll\n
+3)Snap to page - Scroll one page at a time\n
+4)Free view - scroll multiple pages ata time\n
+It is still in beta so stay tuned for more updates such as more pages pdf, optimisation for how it looks, etc."
+        android:textSize="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AboutA" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Abouta" />
+
+    <TextView
+        android:id="@+id/AboutU"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Abouta"
+        android:layout_marginTop="4dp"
+        android:text="About us >"
+        android:textColor="@color/black"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.024"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Abouta" />
+
+    <TextView
+        android:id="@+id/Aboutu"
+        android:layout_width="676dp"
+        android:layout_height="91dp"
+        android:layout_below="@+id/AboutU"
+        android:layout_marginBottom="4dp"
+        android:text="DevBase is self assigned company and is created by bunch of college guys learning to find their passion in this huge IT world.
+Our goal is to create bunch of apps we require in our daily life and learn the basic of android development.
+It will be great help if you keep on supporting us."
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.486"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AboutU"
+        app:layout_constraintVertical_bias="0.116" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

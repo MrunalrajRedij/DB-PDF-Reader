@@ -273,6 +273,7 @@ public class ViewPDFFiles extends AppCompatActivity {
             vView = true;
             hView = false;
             PDF1();
+
         }
         else if (id == R.id.horizontalView){
             hView=true;

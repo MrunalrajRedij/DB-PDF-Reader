@@ -12,6 +12,7 @@
         android:id="@+id/open_pdf"
         android:layout_width="177dp"
         android:layout_height="65dp"
+        android:layout_marginBottom="32dp"
         android:gravity="center"
         android:text="Browse pdf file"
         android:textAlignment="center"
@@ -21,28 +22,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.9" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/listBtn"
         android:layout_width="174dp"
 
         android:layout_height="59dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="20dp"
         android:gravity="center"
         android:text="On this device"
         android:textColor="@color/white"
         android:textSize="10dp"
         app:layout_constraintBottom_toTopOf="@+id/newBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/newBtn"
         android:layout_width="142dp"
         android:layout_height="59dp"
-        android:layout_marginBottom="220dp"
+        android:layout_marginBottom="256dp"
         android:gravity="center"
         android:text="Create PDF"
         android:textAlignment="center"

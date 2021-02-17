@@ -40,7 +40,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="-4dp"
         app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-3940256099942544/6300978111" />
+        app:adUnitId="ca-app-pub-7392847676747975/2814819693" />
 
 
 </RelativeLayout>

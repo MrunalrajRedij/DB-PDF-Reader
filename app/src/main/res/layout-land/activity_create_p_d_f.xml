@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".createPDFActivity">
+
+    <EditText
+        android:id="@+id/pdfName"
+        android:layout_width="676dp"
+        android:layout_height="46dp"
+        android:gravity="start"
+        android:hint="Name of the PDF"
+        android:inputType="textCapSentences|textMultiLine"
+        android:textAlignment="viewStart"
+        android:textCursorDrawable="@null"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/pdfTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.746" />
+
+    <EditText
+        android:id="@+id/pdfTitle"
+        android:layout_width="672dp"
+        android:layout_height="43dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="start"
+        android:hint="Title"
+        android:inputType="textCapSentences|textMultiLine"
+        android:textAlignment="viewStart"
+        android:textCursorDrawable="@null"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/pdfBody"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.515"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/pdfBody"
+        android:layout_width="675dp"
+        android:layout_height="156dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="start"
+        android:hint="Body"
+        android:inputType="textCapSentences|textMultiLine"
+        android:textAlignment="viewStart"
+        android:textCursorDrawable="@null"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/createPDF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.54"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/createPDF"
+        android:layout_width="116dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:text="Create PDF"
+        android:textColor="@color/white"
+        android:textSize="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

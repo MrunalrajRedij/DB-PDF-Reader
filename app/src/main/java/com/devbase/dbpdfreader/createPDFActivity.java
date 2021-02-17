@@ -163,7 +163,7 @@ public class createPDFActivity extends AppCompatActivity {
 
                             AdRequest adRequest = new AdRequest.Builder().build();
                             interstitial = new InterstitialAd(createPDFActivity.this);
-                            interstitial.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+                            interstitial.setAdUnitId("ca-app-pub-7392847676747975/5832877038");
                             interstitial.loadAd(adRequest);
                             interstitial.setAdListener(new AdListener() {
                                 public void onAdLoaded() {
