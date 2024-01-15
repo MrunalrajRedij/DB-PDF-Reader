@@ -1,35 +1,29 @@
 package com.devbase.dbpdfreader;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.ads.AdListener;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
@@ -41,7 +35,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 public class createPDFActivity extends AppCompatActivity {
 
@@ -51,9 +44,7 @@ public class createPDFActivity extends AppCompatActivity {
     static File fromCreate;
     static boolean fromCreatebool = false;
 
-    private AdView iadView;
-    InterstitialAd mInterstitialAd;
-    private  InterstitialAd interstitial;
+    private InterstitialAd interstitial;
 
     boolean perm = false;
 
@@ -77,6 +68,7 @@ public class createPDFActivity extends AppCompatActivity {
 
         //Action Bar
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.setTitle("Create PDF");
 
         //mainCreate alert box
@@ -102,9 +94,25 @@ public class createPDFActivity extends AppCompatActivity {
         //Interstitial ad
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
+            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {}
         });
+
+        @SuppressLint("VisibleForTests") AdRequest adRequest = new AdRequest.Builder().build();
+
+        InterstitialAd.load(createPDFActivity.this,"ca-app-pub-7392847676747975/5832877038", adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        // The mInterstitialAd reference will be null until
+                        // an ad is loaded.
+                        interstitial = interstitialAd;
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        interstitial = null;
+                    }
+                });
 
         export.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,16 +168,7 @@ public class createPDFActivity extends AppCompatActivity {
                             }
                             Toast.makeText(getApplicationContext(), "PDF created successfully", Toast.LENGTH_LONG).show();
                             document.close();
-
-                            AdRequest adRequest = new AdRequest.Builder().build();
-                            interstitial = new InterstitialAd(createPDFActivity.this);
-                            interstitial.setAdUnitId("ca-app-pub-7392847676747975/5832877038");
-                            interstitial.loadAd(adRequest);
-                            interstitial.setAdListener(new AdListener() {
-                                public void onAdLoaded() {
-                                    displayInterstitial();
-                                }
-                            });
+                            displayInterstitial();
 
 
                             final AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(createPDFActivity.this);
@@ -217,8 +216,8 @@ public class createPDFActivity extends AppCompatActivity {
     }
 
     private void displayInterstitial(){
-        if(interstitial.isLoaded()){
-            interstitial.show();
+        if(interstitial != null){
+            interstitial.show(this);
             interstitial.setImmersiveMode(true);
         }
     }

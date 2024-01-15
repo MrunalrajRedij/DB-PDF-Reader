@@ -1,52 +1,28 @@
 package com.devbase.dbpdfreader;
-
-import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.Toolbar;
-
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
-import java.io.File;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
-
     static Uri uri1;
-
     static boolean fromFilebool = false;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
         SharedPreferences sp = getSharedPreferences("JP", MODE_PRIVATE);
         boolean bln = sp.getBoolean("ONCE", true);
-
         if (bln) {
-
             AlertDialog.Builder mainAlert = new AlertDialog.Builder(MainActivity.this);
             mainAlert.setTitle("WELCOME");
             mainAlert.setMessage("And sorry for enabling ads.\n" +
@@ -56,14 +32,10 @@ public class MainActivity extends AppCompatActivity {
             mainAlert.setCancelable(false);
             mainAlert.setPositiveButton("I get it", (dialog, which) -> dialog.dismiss());
             mainAlert.show();
-
             SharedPreferences.Editor ediotr = sp.edit();
             ediotr.putBoolean("ONCE", false);
             ediotr.apply();
-
         }
-
-
 
         ExtendedFloatingActionButton newBtn = findViewById(R.id.newBtn);
         newBtn.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, createPDFActivity.class)));
@@ -71,22 +43,13 @@ public class MainActivity extends AppCompatActivity {
         Button listBtn = findViewById(R.id.listBtn);
         listBtn.setOnClickListener(v -> startActivity(new Intent(MainActivity.this,pdfList.class)));
 
-
         ExtendedFloatingActionButton openParticularPDFBtn = findViewById(R.id.open_pdf);
         openParticularPDFBtn.setOnClickListener(v -> {
             Intent pdfFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
             pdfFileIntent.setType("application/pdf");
             startActivityForResult(pdfFileIntent, 1);
-
         });
-
-
-
     }
-
-
-
-
 
 
     @Override
@@ -102,14 +65,13 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.share) {
             try {
                 Intent shareAppIntent = new Intent(Intent.ACTION_SEND);
                 shareAppIntent.setType("text/plane");
                 shareAppIntent.putExtra(Intent.EXTRA_SUBJECT,"Download DB PDF Reader here:");
-                String shareMessage = "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID+"\n\n";
+                String shareMessage = "https://play.google.com/store/apps/details?id=" + getApplication().getPackageName() +"\n\n";
                 shareAppIntent.putExtra(Intent.EXTRA_TEXT,shareMessage);
                 startActivity(Intent.createChooser(shareAppIntent,"Share app"));
             }
@@ -127,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
         }else if(id == R.id.AboutUS){
             startActivity(new Intent(MainActivity.this, aboutActivity.class));
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -143,7 +104,5 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, ViewPDFFiles.class));
             }
         }
-
     }
-
 }

@@ -1,7 +1,6 @@
 package com.devbase.dbpdfreader;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
 public class aboutActivity extends AppCompatActivity {

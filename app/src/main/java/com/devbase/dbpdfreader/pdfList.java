@@ -1,17 +1,8 @@
 package com.devbase.dbpdfreader;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
-import android.app.Activity;
-import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,6 +12,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.jakewharton.processphoenix.ProcessPhoenix;
 
@@ -46,8 +40,6 @@ public class pdfList extends AppCompatActivity {
         setContentView(R.layout.activity_pdf_list);
 
         lv_pdf = findViewById(R.id.listViewPDF);
-
-
 
 
         dir = new File(Environment.getExternalStorageDirectory().toString());
@@ -112,7 +104,7 @@ public class pdfList extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if(requestCode == 1){
